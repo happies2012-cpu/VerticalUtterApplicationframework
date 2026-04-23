@@ -1,34 +1,128 @@
-# Simple application to interact with Gemini API
+# Nexus Platform
 
-"Python: Gemini API" is a simple sample application that shows you how to interact with Google's Gemini APIs .
+A production-ready, full-stack SaaS platform built with Next.js 15, TypeScript, and Tailwind CSS. Features a stunning landing page, complete authentication system, dashboard with analytics, AI chatbot, task management, and admin panel.
 
-## Table of Contents
+## ✨ Features
 
-* [Directory contents](#directory-contents)
-* [Setting up the API Key](#setting-up-the-api-key)
-* [Getting started](#getting-started-with-vs-code)
-* [Sign up for user research](#sign-up-for-user-research)
+### 🎨 Frontend
+- **Stunning Landing Page** with hero, features, testimonials, pricing, and CTA sections
+- **Glassmorphism UI** with gradient backgrounds and smooth animations
+- **Dark + Light Mode** with system preference detection and manual toggle (persists in localStorage)
+- **Fully Responsive** — mobile, tablet, and desktop optimized
+- **Framer Motion** animations and micro-interactions throughout
+- **Beautiful auth pages** (login, signup, forgot password)
 
-## Directory contents
-* `main.py` - the Python sample application that asks Gemini API to generate content based on a prompt
-* `requirements.txt` - includes the google generative ai dependency
+### 🔐 Authentication & Authorization
+- **JWT-based authentication** with HTTP-only cookies
+- **Bcrypt password hashing** for security
+- **Role-based access control (RBAC)** — Admin, Manager, User roles
+- **Protected routes** with automatic redirects
+- **Three demo accounts** ready to use
 
-## Setting up the API Key
-Before you can use the Gemini API, you must first obtain an API key. If you don't already have one, create a key with one click in Google AI Studio.
-[Get API](https://makersuite.google.com/app/apikey) 
-Check if Google AI Studio is available in [your region](https://ai.google.dev/available_regions)
+### 📊 Dashboard
+- **Analytics overview** with charts (Recharts) and stats cards
+- **Task management** with full CRUD, filtering, and search
+- **AI Chatbot** with contextual responses
+- **Profile management** with bio editing
+- **Settings page** with theme, notifications, and security
+- **Admin panel** (admin role only) for user oversight
+- **Blog & Resources** section
 
-## Run the application locally 
+### 🛠 Backend
+- **Next.js API Routes** for all backend logic
+- **Zod validation** on every endpoint
+- **JSON-based persistence** (zero external DB setup needed)
+- **Secure cookie-based sessions**
 
-1. Make sure you have generated the API key as shown above. Please make sure to use and store this key securely. 
+## 🚀 Getting Started
 
-1. Install the package using 
-```pip install -r requirements.txt```
+### Demo Accounts
+After the app starts, log in with any of these:
 
-1. Run this using 
-```python main.py```
+| Role    | Email             | Password    |
+|---------|-------------------|-------------|
+| Admin   | admin@nexus.com   | Admin@123   |
+| Manager | manager@nexus.com | Manager@123 |
+| User    | user@nexus.com    | User@123    |
 
-## Documentation 
-1. You can see detailed API Reference for the Gemini APIs [here](https://googledevai.google.com/api) 
+### Local Development
+```bash
+npm install
+npm run dev
+```
+Visit `http://localhost:5000`
 
-1. You can see more samples and things to do [here](https://googledevai.google.com/tutorials/python_quickstart) 
+### Production Build
+```bash
+npm run build
+npm run start
+```
+
+## 📁 Project Structure
+
+```
+.
+├── app/
+│   ├── api/                  # Backend API routes
+│   │   ├── auth/             # login, signup, logout, me
+│   │   ├── tasks/            # Task CRUD
+│   │   ├── chat/             # AI chatbot
+│   │   └── users/            # User management
+│   ├── dashboard/            # Protected dashboard pages
+│   │   ├── tasks/
+│   │   ├── chatbot/
+│   │   ├── profile/
+│   │   ├── settings/
+│   │   ├── admin/
+│   │   └── blog/
+│   ├── login/                # Auth pages
+│   ├── signup/
+│   ├── forgot-password/
+│   ├── blog/                 # Public blog
+│   ├── contact/              # Contact form
+│   ├── page.tsx              # Landing page
+│   └── layout.tsx
+├── components/
+│   ├── ui/                   # Reusable UI primitives
+│   ├── layout/               # Navbar, Sidebar, Footer
+│   ├── dashboard/            # Dashboard-specific components
+│   └── chatbot/              # AI chatbot UI
+├── lib/
+│   ├── auth.ts               # JWT auth helpers
+│   ├── db.ts                 # JSON file database
+│   ├── types.ts              # TypeScript types
+│   └── utils.ts              # Utility functions
+└── data/                     # Auto-generated JSON storage
+```
+
+## 🌐 Deployment
+
+This app is ready to deploy on:
+- **Replit**: Click the Publish button
+- **Vercel**: `vercel --prod`
+- **Any Node host**: `npm run build && npm start`
+
+## 🎨 Tech Stack
+
+- **Framework**: Next.js 15 (App Router) + TypeScript
+- **Styling**: Tailwind CSS + custom CSS variables
+- **UI Primitives**: Radix UI
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Forms**: React Hook Form + Zod
+- **Charts**: Recharts
+- **Auth**: JWT + bcryptjs
+- **Theming**: next-themes
+- **Notifications**: Sonner
+
+## 📝 Environment Variables
+
+Optional `.env.local`:
+```
+JWT_SECRET=your-super-secret-key-here
+```
+A safe default is provided for local development.
+
+---
+
+Built with ❤️ for modern teams.
