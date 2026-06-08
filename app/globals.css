@@ -2,113 +2,218 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 240 10% 98%;
+    --foreground: 240 10% 4%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 240 10% 4%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 240 10% 4%;
     --primary: 262 83% 58%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 94%;
+    --secondary-foreground: 240 10% 20%;
+    --muted: 240 5% 93%;
+    --muted-foreground: 240 5% 50%;
+    --accent: 262 60% 95%;
+    --accent-foreground: 262 83% 40%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 5% 88%;
+    --input: 240 5% 90%;
     --ring: 262 83% 58%;
-    --radius: 0.75rem;
+    --radius: 0.875rem;
+
+    /* Glass vars - light mode */
+    --glass-bg: rgba(255,255,255,0.55);
+    --glass-border: rgba(255,255,255,0.7);
+    --glass-shadow: rgba(139,92,246,0.08);
+    --glass-blur: 20px;
+    --orb-1: rgba(139,92,246,0.18);
+    --orb-2: rgba(236,72,153,0.14);
+    --orb-3: rgba(59,130,246,0.12);
+    --orb-4: rgba(16,185,129,0.10);
+    --mesh-bg: radial-gradient(ellipse at 20% 50%, rgba(139,92,246,0.07) 0%, transparent 60%),
+               radial-gradient(ellipse at 80% 20%, rgba(236,72,153,0.07) 0%, transparent 60%),
+               radial-gradient(ellipse at 60% 80%, rgba(59,130,246,0.06) 0%, transparent 60%);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --background: 240 10% 4%;
+    --foreground: 240 10% 97%;
+    --card: 240 10% 6%;
+    --card-foreground: 240 10% 97%;
+    --popover: 240 10% 6%;
+    --popover-foreground: 240 10% 97%;
     --primary: 262 83% 65%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 8% 12%;
+    --secondary-foreground: 240 10% 80%;
+    --muted: 240 8% 14%;
+    --muted-foreground: 240 5% 55%;
+    --accent: 262 40% 16%;
+    --accent-foreground: 262 83% 75%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 8% 14%;
+    --input: 240 8% 13%;
     --ring: 262 83% 65%;
+
+    /* Glass vars - dark mode */
+    --glass-bg: rgba(15,12,30,0.55);
+    --glass-border: rgba(255,255,255,0.08);
+    --glass-shadow: rgba(139,92,246,0.15);
+    --orb-1: rgba(139,92,246,0.25);
+    --orb-2: rgba(236,72,153,0.20);
+    --orb-3: rgba(59,130,246,0.18);
+    --orb-4: rgba(16,185,129,0.14);
+    --mesh-bg: radial-gradient(ellipse at 20% 50%, rgba(139,92,246,0.12) 0%, transparent 60%),
+               radial-gradient(ellipse at 80% 20%, rgba(236,72,153,0.10) 0%, transparent 60%),
+               radial-gradient(ellipse at 60% 80%, rgba(59,130,246,0.09) 0%, transparent 60%);
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+  * { @apply border-border; box-sizing: border-box; }
+  html { scroll-behavior: smooth; font-family: 'Inter', sans-serif; }
+  body { @apply bg-background text-foreground antialiased; background-image: var(--mesh-bg); }
+  ::selection { @apply bg-primary/30 text-foreground; }
 }
 
 @layer utilities {
+  /* ── Core Glass ── */
   .glass {
-    @apply bg-white/10 backdrop-blur-md border border-white/20;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.1);
   }
-  .glass-dark {
-    @apply bg-black/20 backdrop-blur-md border border-white/10;
+  .glass-sm {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
   }
+  .glass-heavy {
+    background: var(--glass-bg);
+    backdrop-filter: blur(32px) saturate(1.8);
+    -webkit-backdrop-filter: blur(32px) saturate(1.8);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 20px 60px var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 4px 24px var(--glass-shadow),
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 -1px 0 rgba(0,0,0,0.05) inset;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .glass-card:hover {
+    box-shadow:
+      0 8px 40px var(--glass-shadow),
+      0 0 0 1px rgba(139,92,246,0.2),
+      0 1px 0 rgba(255,255,255,0.12) inset;
+    transform: translateY(-2px);
+  }
+
+  /* ── Gradients ── */
   .gradient-text {
-    @apply bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 bg-clip-text text-transparent;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #6366f1 100%);
   }
-  .gradient-bg {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  .gradient-text-cyan {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
   }
-  .glow {
-    box-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
+  .gradient-border {
+    background: linear-gradient(var(--background), var(--background)) padding-box,
+                linear-gradient(135deg, #a855f7, #ec4899, #6366f1) border-box;
+    border: 1px solid transparent;
   }
-  .glow-sm {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+
+  /* ── Glow ── */
+  .glow { box-shadow: 0 0 40px rgba(139,92,246,0.4), 0 0 80px rgba(139,92,246,0.15); }
+  .glow-sm { box-shadow: 0 0 20px rgba(139,92,246,0.3); }
+  .glow-pink { box-shadow: 0 0 40px rgba(236,72,153,0.35), 0 0 80px rgba(236,72,153,0.12); }
+  .glow-cyan { box-shadow: 0 0 30px rgba(6,182,212,0.3); }
+  .glow-text { text-shadow: 0 0 30px rgba(139,92,246,0.5); }
+
+  /* ── Neon borders ── */
+  .border-neon {
+    border: 1px solid rgba(139,92,246,0.5);
+    box-shadow: 0 0 10px rgba(139,92,246,0.3), inset 0 0 10px rgba(139,92,246,0.05);
   }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+
+  /* ── Scan line effect ── */
+  .scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(139,92,246,0.015) 2px,
+      rgba(139,92,246,0.015) 4px
+    );
+    pointer-events: none;
   }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+
+  /* ── Misc ── */
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .no-select { user-select: none; }
 }
 
-html {
-  scroll-behavior: smooth;
+/* ── Keyframes ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-24px) rotate(1deg); }
+  66% { transform: translateY(-10px) rotate(-1deg); }
 }
-
-.animate-gradient-x {
-  background-size: 200% 200%;
-  animation: gradient-x 8s ease infinite;
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-40px) scale(1.04); }
 }
-
-@keyframes gradient-x {
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(139,92,246,0.5); }
+  70% { transform: scale(1); box-shadow: 0 0 0 16px rgba(139,92,246,0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(139,92,246,0); }
+}
+@keyframes gradient-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+@keyframes data-stream {
+  0% { opacity: 0; transform: translateY(0); }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-120px); }
+}
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.85; }
+  97% { opacity: 1; }
+  98% { opacity: 0.9; }
+}
+@keyframes cyber-pulse {
+  0%, 100% { border-color: rgba(139,92,246,0.4); box-shadow: 0 0 8px rgba(139,92,246,0.2); }
+  50% { border-color: rgba(236,72,153,0.6); box-shadow: 0 0 20px rgba(236,72,153,0.3); }
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-delayed {
-  animation: float 6s ease-in-out infinite 2s;
-}
+.animate-float { animation: float 8s ease-in-out infinite; }
+.animate-float-slow { animation: float-slow 12s ease-in-out infinite; }
+.animate-float-delayed { animation: float 8s ease-in-out infinite 3s; }
+.animate-pulse-ring { animation: pulse-ring 2.5s cubic-bezier(0.455,0.03,0.515,0.955) infinite; }
+.animate-gradient-shift { background-size: 200% 200%; animation: gradient-shift 6s ease infinite; }
+.animate-data-stream { animation: data-stream 4s ease-in-out infinite; }
+.animate-flicker { animation: flicker 8s step-end infinite; }
+.animate-cyber-pulse { animation: cyber-pulse 3s ease-in-out infinite; }

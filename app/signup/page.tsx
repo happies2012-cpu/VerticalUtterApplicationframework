@@ -8,191 +8,138 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Eye, EyeOff, Zap, Mail, Lock, User, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { GlassButton } from "@/components/ui/GlassButton";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { AnimatedBackground } from "@/components/ui/AnimatedBackground";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-const signupSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
+const schema = z.object({
+  name: z.string().min(2, "Identifier must be ≥2 chars"),
+  email: z.string().email("Invalid neural address"),
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Must contain uppercase letter")
-    .regex(/[0-9]/, "Must contain a number"),
-  confirmPassword: z.string(),
-}).refine((d) => d.password === d.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
+    .min(8, "Access key must be ≥8 chars")
+    .regex(/[A-Z]/, "Requires uppercase matrix")
+    .regex(/[0-9]/,  "Requires numeric sequence"),
+  confirm: z.string(),
+}).refine((d) => d.password === d.confirm, {
+  message: "Key mismatch detected",
+  path: ["confirm"],
 });
-
-type SignupFormData = z.infer<typeof signupSchema>;
+type Form = z.infer<typeof schema>;
 
 export default function SignupPage() {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignupFormData>({
-    resolver: zodResolver(signupSchema),
-  });
+  const { register, handleSubmit, formState: { errors } } = useForm<Form>({ resolver: zodResolver(schema) });
 
-  const onSubmit = async (data: SignupFormData) => {
-    setIsLoading(true);
+  const onSubmit = async (data: Form) => {
+    setLoading(true);
     try {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          password: data.password,
-        }),
+        body: JSON.stringify({ name: data.name, email: data.email, password: data.password }),
       });
       const result = await res.json();
-      if (!res.ok) throw new Error(result.error || "Signup failed");
-      toast.success("Account created! Welcome to Nexus.");
+      if (!res.ok) throw new Error(result.error || "Initialization failed");
+      toast.success("Node initialized. Welcome to the mesh.");
       router.push("/dashboard");
       router.refresh();
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Signup failed");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Initialization failed");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden p-4">
-      <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
+      <AnimatedBackground />
+
+      <div className="absolute top-4 right-4 z-10">
+        <ThemeToggle />
+      </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md relative"
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-md relative z-10"
       >
         <div className="flex items-center gap-2 justify-center mb-8">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-white" />
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center glow-sm">
+              <Zap className="w-4.5 h-4.5 text-white" />
             </div>
-            <span className="font-bold text-lg gradient-text">Nexus</span>
+            <div>
+              <div className="font-black text-sm gradient-text tracking-tight leading-none">NEXUS</div>
+              <div className="text-[7px] font-mono text-muted-foreground tracking-widest">NEURAL·OS</div>
+            </div>
           </Link>
         </div>
 
-        <div className="bg-card border border-border/50 rounded-2xl p-8 shadow-xl">
-          <div className="mb-8">
-            <h1 className="text-3xl font-black mb-2">Create account</h1>
-            <p className="text-muted-foreground">
-              Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline font-medium">
-                Sign in
+        <GlassCard className="p-7" variant="default">
+          <div className="mb-7">
+            <div className="text-[9px] font-mono text-muted-foreground/50 tracking-widest uppercase mb-2">
+              NODE·INITIALIZATION
+            </div>
+            <h1 className="text-2xl font-black tracking-tight mb-1">Create your node</h1>
+            <p className="text-sm text-muted-foreground">
+              Already active?{" "}
+              <Link href="/login" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+                Authenticate →
               </Link>
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full name</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  id="name"
-                  placeholder="John Doe"
-                  className="pl-10"
-                  {...register("name")}
-                />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {[
+              { id: "name",     label: "Operator ID",    Icon: User,  type: "text",     ph: "John Operator",          field: "name"    as const },
+              { id: "email",    label: "Neural Address", Icon: Mail,  type: "email",    ph: "operator@nexus.com",     field: "email"   as const },
+              { id: "password", label: "Access Key",     Icon: Lock,  type: "password", ph: "Min 8 · Uppercase · Num", field: "password" as const },
+              { id: "confirm",  label: "Confirm Key",    Icon: Lock,  type: "password", ph: "Repeat access key",      field: "confirm" as const },
+            ].map(({ id, label, Icon, type, ph, field }) => (
+              <div key={id} className="space-y-1.5">
+                <Label htmlFor={id} className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
+                  {label}
+                </Label>
+                <div className="relative">
+                  <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id={id}
+                    type={field === "password" || field === "confirm" ? (showPwd ? "text" : "password") : type}
+                    placeholder={ph}
+                    className="pl-10 pr-10"
+                    {...register(field)}
+                  />
+                  {(field === "password" || field === "confirm") && (
+                    <button type="button" onClick={() => setShowPwd(!showPwd)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                      {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  )}
+                </div>
+                {errors[field] && <p className="text-xs text-red-400 font-mono">{errors[field]?.message}</p>}
               </div>
-              {errors.name && (
-                <p className="text-xs text-destructive">{errors.name.message}</p>
-              )}
-            </div>
+            ))}
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email address</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  className="pl-10"
-                  {...register("email")}
-                />
-              </div>
-              {errors.email && (
-                <p className="text-xs text-destructive">{errors.email.message}</p>
-              )}
-            </div>
+            <GlassButton type="submit" variant="gradient" size="lg" className="w-full mt-2" loading={loading} glow>
+              Initialize Node
+              <ArrowRight className="w-4 h-4" />
+            </GlassButton>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Min 8 chars, uppercase, number"
-                  className="pl-10 pr-10"
-                  {...register("password")}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-xs text-destructive">{errors.password.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="Repeat your password"
-                  className="pl-10"
-                  {...register("confirmPassword")}
-                />
-              </div>
-              {errors.confirmPassword && (
-                <p className="text-xs text-destructive">{errors.confirmPassword.message}</p>
-              )}
-            </div>
-
-            <Button
-              type="submit"
-              variant="gradient"
-              size="lg"
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <>Create Account <ArrowRight className="w-4 h-4" /></>
-              )}
-            </Button>
-
-            <p className="text-xs text-center text-muted-foreground">
-              By creating an account, you agree to our{" "}
-              <Link href="#" className="text-primary hover:underline">Terms</Link> and{" "}
-              <Link href="#" className="text-primary hover:underline">Privacy Policy</Link>.
+            <p className="text-[10px] text-center text-muted-foreground/50 font-mono">
+              By initializing, you accept the{" "}
+              <Link href="#" className="text-purple-400 hover:underline">TERMS</Link> and{" "}
+              <Link href="#" className="text-purple-400 hover:underline">PRIVACY·MATRIX</Link>.
             </p>
           </form>
-        </div>
+        </GlassCard>
       </motion.div>
     </div>
   );
